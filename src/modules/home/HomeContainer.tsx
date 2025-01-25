@@ -358,7 +358,6 @@ export default function HomeContainer() {
                 className={`
                   project-card 
                   relative 
-                  moving-border 
                   flex flex-col 
                   ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} 
                   gap-4 sm:gap-8 
@@ -864,6 +863,16 @@ export default function HomeContainer() {
           </h2>
           <div className="space-y-8">
             {[
+              {
+                company: "Ganeshcom Studio",
+                role: "Nextjs Developer",
+                period: "Aug 2024 - Present",
+                responsibilities: [
+                  "Developing modern web applications using Next.js",
+                  "Implementing responsive designs and UI components",
+                  "Collaborating with clients on freelance projects"
+                ]
+              },
               {
                 company: "Hanel Asia Indonesia",
                 role: "Frontend Developer",

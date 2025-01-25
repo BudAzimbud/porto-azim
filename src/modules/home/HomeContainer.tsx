@@ -1,6 +1,6 @@
 import Image from "next/image";
 import gsap from "gsap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const borderAnimation = `
   @keyframes borderAnimation {
@@ -28,6 +28,20 @@ const movingBorderAnimation = `
 `;
 
 export default function HomeContainer() {
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setDarkMode(true);
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    document.documentElement.classList.toggle('dark');
+  };
+
   const badgeColors = [
     'bg-blue-500',
     'bg-purple-500',
@@ -44,15 +58,12 @@ export default function HomeContainer() {
   };
 
   useEffect(() => {
-    // Import and register ScrollTrigger only on client side
     const registerScrollTrigger = async () => {
       const ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
       gsap.registerPlugin(ScrollTrigger);
 
-      // Initial animations timeline
       const tl = gsap.timeline();
 
-      // Animasi navbar
       tl.from(".nav-item", {
         y: -50,
         autoAlpha: 0,
@@ -61,7 +72,6 @@ export default function HomeContainer() {
         ease: "power3.out"
       });
 
-      // Animasi foto dan badge
       tl.from(".profile-image", {
         scale: 0,
         autoAlpha: 0,
@@ -79,7 +89,6 @@ export default function HomeContainer() {
         clearProps: "all"
       }, "-=0.5");
 
-      // Animasi nama
       tl.from(".name-title", {
         y: 50,
         autoAlpha: 0,
@@ -87,7 +96,6 @@ export default function HomeContainer() {
         ease: "power3.out"
       }, "-=0.3");
 
-      // Animasi role
       tl.from(".role-title", {
         x: -50,
         autoAlpha: 0,
@@ -95,7 +103,6 @@ export default function HomeContainer() {
         ease: "power3.out"
       }, "-=0.4");
 
-      // Animasi lokasi
       tl.from(".location-text", {
         x: 50,
         autoAlpha: 0,
@@ -103,7 +110,6 @@ export default function HomeContainer() {
         ease: "power3.out"
       }, "-=0.4");
 
-      // Portfolio section animations
       gsap.utils.toArray('.project-card').forEach((card: any, i) => {
         gsap.from(card, {
           scrollTrigger: {
@@ -119,7 +125,6 @@ export default function HomeContainer() {
         });
       });
 
-      // Experience cards animation
       gsap.utils.toArray('.experience-card').forEach((card: any, i) => {
         gsap.from(card, {
           scrollTrigger: {
@@ -134,7 +139,6 @@ export default function HomeContainer() {
         });
       });
 
-      // Contact form animation
       gsap.from(".contact-form", {
         scrollTrigger: {
           trigger: ".contact-form",
@@ -147,7 +151,6 @@ export default function HomeContainer() {
         ease: "power3.out"
       });
 
-      // Section headers animation
       gsap.utils.toArray('.section-header').forEach((header: any) => {
         gsap.from(header, {
           scrollTrigger: {
@@ -167,7 +170,7 @@ export default function HomeContainer() {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full dark:bg-gray-900 transition-colors duration-300">
       <style jsx global>{`
         ${borderAnimation}
         ${movingBorderAnimation}
@@ -189,30 +192,43 @@ export default function HomeContainer() {
         }
       `}</style>
 
-      {/* Navbar - Responsive */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-16 flex items-center justify-end">
-            {['Portfolio', 'Experience', 'Contact'].map((item, index) => (
-              <a
-                key={index}
-                href={`#${item.toLowerCase()}`}
-                className="nav-item relative px-3 sm:px-6 py-2 text-sm sm:text-base text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300 group"
-              >
-                {item}
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-[length:200%_200%] animate-[borderAnimation_3s_ease-in-out_infinite] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></div>
-              </a>
-            ))}
+          <div className="h-16 flex items-center justify-between">
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
+            >
+              {darkMode ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+              )}
+            </button>
+
+            <div className="flex items-center space-x-4">
+              {['Portfolio', 'Experience', 'Contact'].map((item, index) => (
+                <a
+                  key={index}
+                  href={`#${item.toLowerCase()}`}
+                  className="nav-item relative px-3 sm:px-6 py-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
+                >
+                  {item}
+                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-[length:200%_200%] animate-[borderAnimation_3s_ease-in-out_infinite] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></div>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-        {/* Bottom moving border */}
         <div className="h-[2px] bg-gradient-to-r from-blue-500 via-red-500 via-purple-500 via-red-500 to-blue-500 bg-[length:300%_100%] animate-[movingBorder_4s_linear_infinite]"></div>
       </nav>
 
-      {/* Main Content - Responsive */}
-      <div className="flex min-h-screen items-center justify-center w-full  pt-16">
+      <div className="flex min-h-screen items-center justify-center w-full pt-16 dark:bg-gray-900">
         <div className="text-center relative">
-          {/* Circular badges - Responsive */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[400px] h-[280px] sm:h-[400px]">
             {[...Array(16)].map((_, index) => (
               <div
@@ -248,7 +264,6 @@ export default function HomeContainer() {
             ))}
           </div>
 
-          {/* Profile Image - Responsive */}
           <div className="relative w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] mx-auto mb-4">
             <Image
               src="/Azim.png"
@@ -259,7 +274,6 @@ export default function HomeContainer() {
             />
           </div>
 
-          {/* Name and Info - Responsive */}
           <h1 className="name-title text-center font-bold text-3xl sm:text-4xl text-blue-600 transition-colors duration-300 cursor-pointer">
             Azim
           </h1>
@@ -271,11 +285,11 @@ export default function HomeContainer() {
           </h3>
         </div>
       </div>
+      
 
-      {/* Portfolio Section - Responsive */}
-      <section id="portfolio" className="min-h-screen bg-gray-50 py-12 sm:py-20">
+      <section id="portfolio" className="min-h-screen bg-gray-50 dark:bg-gray-800 py-12 sm:py-20 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800">
+          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-gray-100">
             Featured Projects
           </h2>
           <div className="space-y-8 sm:space-y-20">
@@ -349,7 +363,7 @@ export default function HomeContainer() {
                   ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} 
                   gap-4 sm:gap-8 
                   items-center 
-                  bg-white 
+                  bg-white dark:bg-gray-800
                   rounded-lg 
                   p-4 sm:p-6 
                   hover:shadow-xl 
@@ -357,15 +371,14 @@ export default function HomeContainer() {
                   duration-300
                 `}
               >
-                {/* Project Info */}
                 <div className="flex-1 space-y-3 sm:space-y-4">
-                  <h3 className="text-xl sm:text-2xl font-bold text-gray-800">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
                     {project.link ? (
                       <a 
                         href={project.link} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="hover:text-blue-600 transition-colors duration-300"
+                        className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
                       >
                         {project.title} ↗
                       </a>
@@ -373,12 +386,12 @@ export default function HomeContainer() {
                       project.title
                     )}
                   </h3>
-                  <p className="text-sm sm:text-base text-gray-600">{project.description}</p>
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">{project.description}</p>
                   <div className="flex flex-wrap gap-2">
                     {project.stacks.map((tech, i) => (
                       <span 
                         key={i} 
-                        className="px-2 sm:px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs sm:text-sm"
+                        className="px-2 sm:px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-full text-xs sm:text-sm"
                       >
                         {tech}
                       </span>
@@ -386,11 +399,10 @@ export default function HomeContainer() {
                   </div>
                 </div>
 
-                {/* Project Image */}
                 <div className="flex-1 w-full lg:w-auto">
                   {project.type === 'web' ? (
-                    <div className="relative w-full aspect-[16/10] bg-gray-900 rounded-lg p-2">
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-1 sm:h-1.5 bg-gray-800 rounded-b-lg"></div>
+                    <div className="relative w-full aspect-[16/10] bg-gray-900 dark:bg-gray-950 rounded-lg p-2">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-1 sm:h-1.5 bg-gray-800 dark:bg-gray-700 rounded-b-lg"></div>
                       <div className="w-full h-full overflow-hidden rounded-md">
                         <img 
                           src={project.image} 
@@ -400,8 +412,8 @@ export default function HomeContainer() {
                       </div>
                     </div>
                   ) : (
-                    <div className="relative w-48 sm:w-64 mx-auto aspect-[9/19] bg-gray-900 rounded-3xl p-2">
-                      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-1 bg-gray-800 rounded-lg"></div>
+                    <div className="relative w-48 sm:w-64 mx-auto aspect-[9/19] bg-gray-900 dark:bg-gray-950 rounded-3xl p-2">
+                      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-1 bg-gray-800 dark:bg-gray-700 rounded-lg"></div>
                       <div className="w-full h-full overflow-hidden rounded-2xl">
                         <img 
                           src={project.image} 
@@ -418,10 +430,333 @@ export default function HomeContainer() {
         </div>
       </section>
 
-      {/* Apps Statistics Section - After Portfolio */}
-      <section className="py-12 sm:py-20 bg-white">
+
+      <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800">
+            Tech Stack
+          </h2>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
+            {[
+              {
+                name: "React",
+                icon: "https://cdn.simpleicons.org/react/61DAFB",
+                category: "Frontend"
+              },
+              {
+                name: "Next.js",
+                icon: "https://cdn.simpleicons.org/nextdotjs/000000",
+                category: "Frontend"
+              },
+              {
+                name: "TypeScript",
+                icon: "https://cdn.simpleicons.org/typescript/3178C6",
+                category: "Language"
+              },
+              {
+                name: "Node.js",
+                icon: "https://cdn.simpleicons.org/nodedotjs/339933",
+                category: "Backend"
+              },
+              {
+                name: "NestJS",
+                icon: "https://cdn.simpleicons.org/nestjs/E0234E",
+                category: "Backend"
+              },
+              {
+                name: "MongoDB",
+                icon: "https://cdn.simpleicons.org/mongodb/47A248",
+                category: "Database"
+              },
+              {
+                name: "PostgreSQL",
+                icon: "https://cdn.simpleicons.org/postgresql/4169E1",
+                category: "Database"
+              },
+              {
+                name: "Tailwind CSS",
+                icon: "https://cdn.simpleicons.org/tailwindcss/06B6D4",
+                category: "Styling"
+              },
+              {
+                name: "Material UI",
+                icon: "https://cdn.simpleicons.org/mui/007FFF",
+                category: "UI Framework"
+              },
+              {
+                name: "Redux",
+                icon: "https://cdn.simpleicons.org/redux/764ABC",
+                category: "State Management"
+              },
+              {
+                name: "AWS",
+                icon: "https://cdn.simpleicons.org/amazonwebservices/232F3E",
+                category: "Cloud"
+              },
+              {
+                name: "Docker",
+                icon: "https://cdn.simpleicons.org/docker/2496ED",
+                category: "DevOps"
+              },
+              {
+                name: "Git",
+                icon: "https://cdn.simpleicons.org/git/F05032",
+                category: "Version Control"
+              },
+              {
+                name: "GitHub",
+                icon: "https://cdn.simpleicons.org/github/181717",
+                category: "Platform"
+              },
+              {
+                name: "VS Code",
+                icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg",
+                category: "IDE"
+              },
+              {
+                name: "Figma",
+                icon: "https://cdn.simpleicons.org/figma/F24E1E",
+                category: "Design"
+              }
+            ].map((skill, index) => (
+              <div 
+                key={index}
+                className="group bg-white p-4 sm:p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col items-center space-y-3 hover:-translate-y-1"
+              >
+                <div className="relative w-12 h-12 sm:w-16 sm:h-16">
+                  <img
+                    src={skill.icon}
+                    alt={`${skill.name} icon`}
+                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-medium text-sm sm:text-base text-gray-800">
+                    {skill.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                    {skill.category}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-3 sm:gap-4">
+            {[
+              { name: "Frontend", color: "bg-blue-100 text-blue-600" },
+              { name: "Backend", color: "bg-green-100 text-green-600" },
+              { name: "Database", color: "bg-purple-100 text-purple-600" },
+              { name: "DevOps", color: "bg-orange-100 text-orange-600" },
+              { name: "UI/UX", color: "bg-pink-100 text-pink-600" }
+            ].map((category, index) => (
+              <div 
+                key={index}
+                className={`px-4 py-2 rounded-full ${category.color} text-xs sm:text-sm font-medium`}
+              >
+                {category.name}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-white">
+            Current Learning Path
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 sm:p-8 rounded-2xl shadow-lg">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-xl">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">AI Engineer</h3>
+              </div>
+
+              <div className="space-y-4">
+                {[
+                  {
+                    phase: "Phase 1: Foundations",
+                    items: ["Python Advanced", "Mathematics & Statistics", "Machine Learning Basics"],
+                    status: "completed"
+                  },
+                  {
+                    phase: "Phase 2: Deep Learning",
+                    items: ["Neural Networks", "TensorFlow", "PyTorch"],
+                    status: "in-progress"
+                  },
+                  {
+                    phase: "Phase 3: Specialization",
+                    items: ["Natural Language Processing", "Computer Vision", "Reinforcement Learning"],
+                    status: "upcoming"
+                  },
+                  {
+                    phase: "Phase 4: Production",
+                    items: ["MLOps", "Model Deployment", "AI System Design"],
+                    status: "upcoming"
+                  }
+                ].map((phase, index) => (
+                  <div key={index} className="relative pl-8 pb-4">
+                    {index !== 3 && (
+                      <div className="absolute left-3 top-8 w-0.5 h-full bg-blue-200 dark:bg-blue-700"></div>
+                    )}
+                    <div className={`absolute left-0 top-1.5 w-6 h-6 rounded-full flex items-center justify-center
+                      ${phase.status === 'completed' ? 'bg-green-500 dark:bg-green-600' : 
+                        phase.status === 'in-progress' ? 'bg-blue-500 dark:bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                      {phase.status === 'completed' && (
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                      {phase.status === 'in-progress' && (
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                      )}
+                    </div>
+                    <h4 className="font-semibold text-gray-800 dark:text-white mb-2">{phase.phase}</h4>
+                    <ul className="space-y-1">
+                      {phase.items.map((item, i) => (
+                        <li key={i} className="text-sm text-gray-600 dark:text-gray-300 flex items-center space-x-2">
+                          <span>• {item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 p-6 sm:p-8 rounded-2xl shadow-lg">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="p-3 bg-orange-100 dark:bg-orange-900/50 rounded-xl">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">Blockchain Developer</h3>
+              </div>
+
+              <div className="space-y-4">
+                {[
+                  {
+                    phase: "Phase 1: Basics",
+                    items: ["Blockchain Fundamentals", "Cryptography", "Smart Contracts"],
+                    status: "completed"
+                  },
+                  {
+                    phase: "Phase 2: Development",
+                    items: ["Solidity", "Web3.js", "Ethereum Development"],
+                    status: "in-progress"
+                  },
+                  {
+                    phase: "Phase 3: Advanced",
+                    items: ["DeFi Protocols", "NFT Development", "Layer 2 Solutions"],
+                    status: "upcoming"
+                  },
+                  {
+                    phase: "Phase 4: Specialization",
+                    items: ["Cross-chain Development", "Security & Auditing", "Blockchain Architecture"],
+                    status: "upcoming"
+                  }
+                ].map((phase, index) => (
+                  <div key={index} className="relative pl-8 pb-4">
+                    {index !== 3 && (
+                      <div className="absolute left-3 top-8 w-0.5 h-full bg-orange-200 dark:bg-orange-700"></div>
+                    )}
+                    <div className={`absolute left-0 top-1.5 w-6 h-6 rounded-full flex items-center justify-center
+                      ${phase.status === 'completed' ? 'bg-green-500 dark:bg-green-600' : 
+                        phase.status === 'in-progress' ? 'bg-orange-500 dark:bg-orange-600' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                      {phase.status === 'completed' && (
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                      {phase.status === 'in-progress' && (
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                      )}
+                    </div>
+                    <h4 className="font-semibold text-gray-800 dark:text-white mb-2">{phase.phase}</h4>
+                    <ul className="space-y-1">
+                      {phase.items.map((item, i) => (
+                        <li key={i} className="text-sm text-gray-600 dark:text-gray-300 flex items-center space-x-2">
+                          <span>• {item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+            {[
+              {
+                number: "2",
+                label: "Learning Paths",
+                icon: (
+                  <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                )
+              },
+              {
+                number: "6+",
+                label: "Months Learning",
+                icon: (
+                  <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                )
+              },
+              {
+                number: "10+",
+                label: "Projects Built",
+                icon: (
+                  <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                )
+              },
+              {
+                number: "∞",
+                label: "More to Learn",
+                icon: (
+                  <svg className="w-6 h-6 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                )
+              }
+            ].map((stat, index) => (
+              <div 
+                key={index}
+                className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center space-y-2"
+              >
+                <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-full">
+                  {stat.icon}
+                </div>
+                <span className="text-2xl font-bold text-gray-800 dark:text-white">
+                  {stat.number}
+                </span>
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-white">
             Development Impact
           </h2>
           
@@ -470,25 +805,24 @@ export default function HomeContainer() {
             ].map((stat, index) => (
               <div 
                 key={index}
-                className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center space-y-2 sm:space-y-3"
+                className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center space-y-2 sm:space-y-3"
               >
-                <div className="p-3 sm:p-4 bg-gray-50 rounded-full">
+                <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-full">
                   {stat.icon}
                 </div>
-                <span className="text-2xl sm:text-3xl font-bold text-gray-800">
+                <span className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
                   {stat.number}
                 </span>
-                <span className="font-medium text-sm sm:text-base text-gray-800">
+                <span className="font-medium text-sm sm:text-base text-gray-800 dark:text-white">
                   {stat.label}
                 </span>
-                <span className="text-xs sm:text-sm text-gray-500">
+                <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                   {stat.description}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Additional Stats */}
           <div className="mt-8 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
             {[
               {
@@ -509,12 +843,12 @@ export default function HomeContainer() {
             ].map((metric, index) => (
               <div 
                 key={index}
-                className="bg-white p-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
+                className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
               >
                 <div className={`text-xl sm:text-2xl font-bold ${metric.color}`}>
                   {metric.number}
                 </div>
-                <div className="text-sm sm:text-base text-gray-600 mt-1">
+                <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-1">
                   {metric.label}
                 </div>
               </div>
@@ -523,10 +857,9 @@ export default function HomeContainer() {
         </div>
       </section>
 
-      {/* Experience Section */}
-      <section id="experience" className="min-h-screen py-20">
+      <section id="experience" className="min-h-screen py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="section-header text-3xl font-bold text-center mb-12 text-gray-800">
+          <h2 className="section-header text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">
             Work Experience
           </h2>
           <div className="space-y-8">
@@ -579,16 +912,16 @@ export default function HomeContainer() {
             ].map((exp, index) => (
               <div 
                 key={index}
-                className="experience-card bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 border border-gray-100"
+                className="experience-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
               >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors duration-300">
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
                       {exp.company}
                     </h3>
-                    <p className="text-blue-600 font-medium text-lg">{exp.role}</p>
+                    <p className="text-blue-600 dark:text-blue-400 font-medium text-lg">{exp.role}</p>
                   </div>
-                  <span className="mt-2 md:mt-0 px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-medium">
+                  <span className="mt-2 md:mt-0 px-4 py-2 bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium">
                     {exp.period}
                   </span>
                 </div>
@@ -596,7 +929,7 @@ export default function HomeContainer() {
                   {exp.responsibilities.map((item, i) => (
                     <li key={i} className="flex items-start space-x-3">
                       <span className="mt-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0"></span>
-                      <span className="text-gray-600">{item}</span>
+                      <span className="text-gray-600 dark:text-gray-300">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -606,80 +939,73 @@ export default function HomeContainer() {
         </div>
       </section>
 
-      {/* Contact Section - Responsive */}
-      <section id="contact" className="min-h-screen bg-gray-50 py-12 sm:py-20">
+      <section id="contact" className="min-h-screen bg-gray-50 dark:bg-gray-800 py-12 sm:py-20 transition-colors duration-300">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800">
+          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-white">
             Contact Me
           </h2>
-          <div className="contact-form bg-white rounded-lg shadow-lg p-4 sm:p-8 space-y-6 sm:space-y-8">
-            {/* Contact Info Cards */}
+          <div className="contact-form bg-white dark:bg-gray-900 rounded-lg shadow-lg p-4 sm:p-8 space-y-6 sm:space-y-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              {/* Phone */}
-              <div className="p-6 bg-gray-50 rounded-lg hover:shadow-md transition-shadow duration-300">
+              <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center space-x-4">
-                  <div className="p-3 bg-blue-100 rounded-full">
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full">
+                    <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800">Phone</h3>
-                    <a href="tel:+62895323496371" className="text-blue-600 hover:text-blue-700">
+                    <h3 className="font-semibold text-gray-800 dark:text-white">Phone</h3>
+                    <a href="tel:+62895323496371" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
                       +62 895 3234 96371
                     </a>
                   </div>
                 </div>
               </div>
 
-              {/* Email */}
-              <div className="p-6 bg-gray-50 rounded-lg hover:shadow-md transition-shadow duration-300">
+              <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center space-x-4">
-                  <div className="p-3 bg-blue-100 rounded-full">
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full">
+                    <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800">Email</h3>
-                    <a href="mailto:budazimbud@gmail.com" className="text-blue-600 hover:text-blue-700">
+                    <h3 className="font-semibold text-gray-800 dark:text-white">Email</h3>
+                    <a href="mailto:budazimbud@gmail.com" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
                       budazimbud@gmail.com
                     </a>
                   </div>
                 </div>
               </div>
 
-              {/* Location */}
-              <div className="p-6 bg-gray-50 rounded-lg hover:shadow-md transition-shadow duration-300">
+              <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center space-x-4">
-                  <div className="p-3 bg-blue-100 rounded-full">
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-800">Location</h3>
-                    <p className="text-gray-600">Soreang Kab Bandung, Indonesia</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* LinkedIn */}
-              <div className="p-6 bg-gray-50 rounded-lg hover:shadow-md transition-shadow duration-300">
-                <div className="flex items-center space-x-4">
-                  <div className="p-3 bg-blue-100 rounded-full">
-                    <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                  <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full">
+                    <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800">LinkedIn</h3>
+                    <h3 className="font-semibold text-gray-800 dark:text-white">Location</h3>
+                    <p className="text-gray-600 dark:text-gray-300">Soreang Kab Bandung, Indonesia</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-md transition-shadow duration-300">
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full">
+                    <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800 dark:text-white">LinkedIn</h3>
                     <a 
                       href="https://linkedin.com/in/azim-dot" 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="text-blue-600 hover:text-blue-700"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                     >
                       linkedin.com/in/azim-dot
                     </a>
@@ -688,32 +1014,31 @@ export default function HomeContainer() {
               </div>
             </div>
 
-            {/* Contact Form */}
             <form className="space-y-4 sm:space-y-6 mt-6 sm:mt-8">
               <div>
-                <label htmlFor="name" className="block text-gray-700 font-medium mb-2 text-sm sm:text-base">Name</label>
+                <label htmlFor="name" className="block text-gray-700 dark:text-gray-300 font-medium mb-2 text-sm sm:text-base">Name</label>
                 <input
                   type="text"
                   id="name"
-                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                   placeholder="Your name"
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-gray-700 font-medium mb-2 text-sm sm:text-base">Email</label>
+                <label htmlFor="email" className="block text-gray-700 dark:text-gray-300 font-medium mb-2 text-sm sm:text-base">Email</label>
                 <input
                   type="email"
                   id="email"
-                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                   placeholder="your@email.com"
                 />
               </div>
               <div>
-                <label htmlFor="message" className="block text-gray-700 font-medium mb-2 text-sm sm:text-base">Message</label>
+                <label htmlFor="message" className="block text-gray-700 dark:text-gray-300 font-medium mb-2 text-sm sm:text-base">Message</label>
                 <textarea
                   id="message"
                   rows={4}
-                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                   placeholder="Your message..."
                 ></textarea>
               </div>
@@ -728,8 +1053,7 @@ export default function HomeContainer() {
         </div>
       </section>
 
-      {/* Footer - Responsive */}
-      <footer className="bg-gray-50 py-6 sm:py-8">
+      <footer className="bg-gray-50 dark:bg-gray-800 py-6 sm:py-8 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             <div className="flex items-center space-x-2">
@@ -758,6 +1082,7 @@ export default function HomeContainer() {
           </div>
         </div>
       </footer>
+
     </div>
   );
 }

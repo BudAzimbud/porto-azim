@@ -267,7 +267,7 @@ export default function HomeContainer() {
 
       <div className="hero-section flex min-h-screen items-center justify-center w-full pt-16 dark:bg-gray-900">
         <div className="text-center relative">
-          <div className="circular-text-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[400px] h-[280px] sm:h-[400px]">
+          <div className="hidden sm:block circular-text-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[400px] h-[280px] sm:h-[400px]">
             {[...Array(16)].map((_, index) => (
               <div
                 key={index}
@@ -296,7 +296,7 @@ export default function HomeContainer() {
                     duration-200
                   `}
                 >
-                  {['FULL', 'STACK', 'DEV', '★', 'WEB', 'EXPERT', '2025', '⚡', 'FULL', 'STACK', 'DEV', '★', 'WEB', 'EXPERT', '2024', '⚡'][index]}
+                  {['FULL', 'STACK', 'DEV', '★', 'WEB', 'EXPERT', '2025', '⚡', 'FULL', 'STACK', 'DEV', '★', 'WEB', 'EXPERT', '2025', '⚡'][index]}
                 </span>
               </div>
             ))}
@@ -957,24 +957,25 @@ export default function HomeContainer() {
             ].map((exp, index) => (
               <div 
                 key={index}
-                className="experience-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
               >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">
+                  <div className="space-y-1 sm:space-y-2 w-full sm:w-auto">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
                       {exp.company}
                     </h3>
-                    <p className="text-blue-600 dark:text-blue-400 font-medium text-lg">{exp.role}</p>
+                    <p className="text-base sm:text-lg text-blue-600 dark:text-blue-400 font-medium">
+                      {exp.role}
+                    </p>
                   </div>
-                  <span className="mt-2 md:mt-0 px-4 py-2 bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium">
+                  <span className="mt-2 sm:mt-0 px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap">
                     {exp.period}
                   </span>
                 </div>
-                <ul className="space-y-3">
+                <ul className="space-y-2 sm:space-y-3">
                   {exp.responsibilities.map((item, i) => (
-                    <li key={i} className="flex items-start space-x-3">
+                    <li key={i} className="flex items-start space-x-2 sm:space-x-3">
                       <span className="mt-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0"></span>
-                      <span className="text-gray-600 dark:text-gray-300">{item}</span>
+                      <span className="text-sm sm:text-base text-gray-600 dark:text-gray-300">{item}</span>
                     </li>
                   ))}
                 </ul>

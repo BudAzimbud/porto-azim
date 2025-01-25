@@ -2,25 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-
-@media (prefers-color-scheme: dark) {
- 
-}
-
-
-:root {
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-@keyframes float {
-  from { transform: translateY(0); }
-  to { transform: translateY(20px); }
-}
-
-.animate-twinkle {
-  animation: twinkle 2s infinite;
-}

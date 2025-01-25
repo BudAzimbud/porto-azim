@@ -3,8 +3,17 @@ import { getRandomColor } from "../utils/colors";
 
 export const HeroSection = () => {
   return (
-    <div className="hero-section flex min-h-screen items-center justify-center w-full pt-16 dark:bg-gray-900">
-      <div className="text-center relative">
+    <div className="hero-section flex min-h-screen items-center justify-center w-full pt-16 dark:bg-gray-900 relative">
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <Image
+          src="/Azim.png"
+          alt="Keyboard background"
+          fill
+          className="object-cover opacity-10 dark:opacity-5"
+          priority
+        />
+      </div>
+      <div className="text-center relative z-10">
         <div className="hidden sm:block circular-text-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[400px] h-[280px] sm:h-[400px]">
           {[...Array(16)].map((_, index) => (
             <div

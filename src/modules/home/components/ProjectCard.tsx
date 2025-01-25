@@ -24,8 +24,21 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
         rounded-lg 
         p-4 sm:p-6 
         hover:shadow-xl 
-        transition-shadow 
+        transition-all
         duration-300
+        dark:hover:bg-gray-750
+        dark:hover:shadow-[0_0_30px_-5px_rgba(59,130,246,0.3)]
+        dark:after:hover:opacity-100
+        after:absolute
+        after:inset-0
+        after:opacity-0
+        after:transition-opacity
+        after:duration-300
+        after:rounded-lg
+        after:bg-gradient-radial
+        after:from-blue-500/10
+        after:to-transparent
+        after:-z-10
       `}
     >
       <div className="flex-1 space-y-3 sm:space-y-4">

@@ -164,6 +164,73 @@ export default function HomeContainer() {
           ease: "power3.out"
         });
       });
+
+      // Add scroll-based animation for hero section
+      gsap.to(".profile-image", {
+        scrollTrigger: {
+          trigger: ".hero-section",
+          start: "top top",
+          end: "bottom top",
+          scrub: true
+        },
+        filter: "blur(8px)",
+      });
+
+      gsap.to(".circular-text-container", {
+        scrollTrigger: {
+          trigger: ".hero-section",
+          start: "top top",
+          end: "bottom top",
+          scrub: true
+        },
+        scale: 1.5,
+        opacity: 0,
+      });
+
+      // Tech stack falling blocks animation
+      gsap.utils.toArray('.tech-stack-item').forEach((item: any, i) => {
+        const row = Math.floor(i / 4); // Assuming 4 items per row
+        
+        gsap.set(item, { 
+          y: -100,
+          opacity: 0,
+          rotation: gsap.utils.random(-20, 20)
+        });
+
+        gsap.to(item, {
+          scrollTrigger: {
+            trigger: '.tech-stack-grid',
+            start: `top+=${row * 100} bottom-=200`,
+            end: `top+=${row * 100 + 200} center`,
+            scrub: 1,
+            toggleActions: "play none none reverse",
+            // markers: true, // Uncomment this to see the trigger points
+          },
+          y: 0,
+          opacity: 1,
+          rotation: 0,
+          ease: "power1.inOut",
+        });
+      });
+
+      // Category tags animation with scroll-based reveal
+      gsap.from('.category-tag', {
+        scrollTrigger: {
+          trigger: '.category-tags',
+          start: "top bottom-=100",
+          end: "top center",
+          scrub: 1,
+          toggleActions: "play none none reverse",
+          // markers: true, // Uncomment this to see the trigger points
+        },
+        scale: 0,
+        opacity: 0,
+        stagger: {
+          each: 0.2,
+          from: "center"
+        },
+        ease: "power1.inOut"
+      });
     };
 
     registerScrollTrigger();
@@ -227,9 +294,9 @@ export default function HomeContainer() {
         <div className="h-[2px] bg-gradient-to-r from-blue-500 via-red-500 via-purple-500 via-red-500 to-blue-500 bg-[length:300%_100%] animate-[movingBorder_4s_linear_infinite]"></div>
       </nav>
 
-      <div className="flex min-h-screen items-center justify-center w-full pt-16 dark:bg-gray-900">
+      <div className="hero-section flex min-h-screen items-center justify-center w-full pt-16 dark:bg-gray-900">
         <div className="text-center relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[400px] h-[280px] sm:h-[400px]">
+          <div className="circular-text-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[400px] h-[280px] sm:h-[400px]">
             {[...Array(16)].map((_, index) => (
               <div
                 key={index}
@@ -366,8 +433,33 @@ export default function HomeContainer() {
                   rounded-lg 
                   p-4 sm:p-6 
                   hover:shadow-xl 
-                  transition-shadow 
+                  transition-all 
                   duration-300
+                  dark:hover:bg-gray-800/50
+                  dark:before:absolute
+                  dark:before:inset-0
+                  dark:before:rounded-lg
+                  dark:before:bg-gradient-to-r
+                  dark:before:from-blue-500/5
+                  dark:before:via-purple-500/5
+                  dark:before:to-pink-500/5
+                  dark:before:opacity-0
+                  dark:hover:before:opacity-100
+                  dark:before:transition-opacity
+                  dark:before:duration-300
+                  dark:after:absolute
+                  dark:after:inset-0
+                  dark:after:rounded-lg
+                  dark:after:bg-gradient-to-r
+                  dark:after:from-blue-500/10
+                  dark:after:via-purple-500/10
+                  dark:after:to-pink-500/10
+                  dark:after:blur-xl
+                  dark:after:opacity-0
+                  dark:hover:after:opacity-100
+                  dark:after:transition-opacity
+                  dark:after:duration-300
+                  overflow-hidden
                 `}
               >
                 <div className="flex-1 space-y-3 sm:space-y-4">
@@ -430,13 +522,13 @@ export default function HomeContainer() {
       </section>
 
 
-      <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+      <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300 overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800">
+          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-gray-100">
             Tech Stack
           </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
+          <div className="tech-stack-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
             {[
               {
                 name: "React",
@@ -521,7 +613,7 @@ export default function HomeContainer() {
             ].map((skill, index) => (
               <div 
                 key={index}
-                className="group bg-white p-4 sm:p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col items-center space-y-3 hover:-translate-y-1"
+                className="tech-stack-item group bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col items-center space-y-3 hover:-translate-y-1"
               >
                 <div className="relative w-12 h-12 sm:w-16 sm:h-16">
                   <img
@@ -531,10 +623,10 @@ export default function HomeContainer() {
                   />
                 </div>
                 <div className="text-center">
-                  <h3 className="font-medium text-sm sm:text-base text-gray-800">
+                  <h3 className="font-medium text-sm sm:text-base text-gray-800 dark:text-gray-200">
                     {skill.name}
                   </h3>
-                  <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
                     {skill.category}
                   </p>
                 </div>
@@ -542,17 +634,17 @@ export default function HomeContainer() {
             ))}
           </div>
 
-          <div className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-3 sm:gap-4">
+          <div className="category-tags mt-12 sm:mt-16 flex flex-wrap justify-center gap-3 sm:gap-4">
             {[
-              { name: "Frontend", color: "bg-blue-100 text-blue-600" },
-              { name: "Backend", color: "bg-green-100 text-green-600" },
-              { name: "Database", color: "bg-purple-100 text-purple-600" },
-              { name: "DevOps", color: "bg-orange-100 text-orange-600" },
-              { name: "UI/UX", color: "bg-pink-100 text-pink-600" }
+              { name: "Frontend", color: "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400" },
+              { name: "Backend", color: "bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400" },
+              { name: "Database", color: "bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400" },
+              { name: "DevOps", color: "bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400" },
+              { name: "UI/UX", color: "bg-pink-100 dark:bg-pink-900/50 text-pink-600 dark:text-pink-400" }
             ].map((category, index) => (
               <div 
                 key={index}
-                className={`px-4 py-2 rounded-full ${category.color} text-xs sm:text-sm font-medium`}
+                className={`category-tag px-4 py-2 rounded-full ${category.color} text-xs sm:text-sm font-medium`}
               >
                 {category.name}
               </div>
@@ -787,7 +879,7 @@ export default function HomeContainer() {
                 description: "Electron Based",
                 icon: (
                   <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 )
               },

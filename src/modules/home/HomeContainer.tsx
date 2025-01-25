@@ -283,6 +283,109 @@ export default function HomeContainer() {
       
       <HeroSection />
 
+      <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-white">
+            Development Impact
+          </h2>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            {[
+              {
+                number: "8+",
+                label: "Web Apps",
+                description: "Production Ready",
+                icon: (
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                )
+              },
+              {
+                number: "2+",
+                label: "Mobile Apps",
+                description: "Cross Platform",
+                icon: (
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                )
+              },
+              {
+                number: "3+",
+                label: "Desktop Apps",
+                description: "Electron Based",
+                icon: (
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                )
+              },
+              {
+                number: "5+",
+                label: "CMS Apps",
+                description: "Admin Dashboards",
+                icon: (
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                  </svg>
+                )
+              }
+            ].map((stat, index) => (
+              <div 
+                key={index}
+                className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center space-y-2 sm:space-y-3"
+              >
+                <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-full">
+                  {stat.icon}
+                </div>
+                <span className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
+                  {stat.number}
+                </span>
+                <span className="font-medium text-sm sm:text-base text-gray-800 dark:text-white">
+                  {stat.label}
+                </span>
+                <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                  {stat.description}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+            {[
+              {
+                number: "99.9%",
+                label: "Uptime",
+                color: "text-green-600"
+              },
+              {
+                number: "50K+",
+                label: "Active Users",
+                color: "text-blue-600"
+              },
+              {
+                number: "24/7",
+                label: "Support",
+                color: "text-purple-600"
+              }
+            ].map((metric, index) => (
+              <div 
+                key={index}
+                className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
+              >
+                <div className={`text-xl sm:text-2xl font-bold ${metric.color}`}>
+                  {metric.number}
+                </div>
+                <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-1">
+                  {metric.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="portfolio" className="min-h-screen bg-gray-50 dark:bg-gray-800 py-12 sm:py-20 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-gray-100">
@@ -613,109 +716,6 @@ export default function HomeContainer() {
                 <span className="text-sm text-gray-600 dark:text-gray-300">
                   {stat.label}
                 </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="section-header text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-white">
-            Development Impact
-          </h2>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            {[
-              {
-                number: "8+",
-                label: "Web Apps",
-                description: "Production Ready",
-                icon: (
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                  </svg>
-                )
-              },
-              {
-                number: "2+",
-                label: "Mobile Apps",
-                description: "Cross Platform",
-                icon: (
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
-                )
-              },
-              {
-                number: "3+",
-                label: "Desktop Apps",
-                description: "Electron Based",
-                icon: (
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                )
-              },
-              {
-                number: "5+",
-                label: "CMS Apps",
-                description: "Admin Dashboards",
-                icon: (
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-                  </svg>
-                )
-              }
-            ].map((stat, index) => (
-              <div 
-                key={index}
-                className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center space-y-2 sm:space-y-3"
-              >
-                <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-full">
-                  {stat.icon}
-                </div>
-                <span className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
-                  {stat.number}
-                </span>
-                <span className="font-medium text-sm sm:text-base text-gray-800 dark:text-white">
-                  {stat.label}
-                </span>
-                <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                  {stat.description}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
-            {[
-              {
-                number: "99.9%",
-                label: "Uptime",
-                color: "text-green-600"
-              },
-              {
-                number: "50K+",
-                label: "Active Users",
-                color: "text-blue-600"
-              },
-              {
-                number: "24/7",
-                label: "Support",
-                color: "text-purple-600"
-              }
-            ].map((metric, index) => (
-              <div 
-                key={index}
-                className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
-              >
-                <div className={`text-xl sm:text-2xl font-bold ${metric.color}`}>
-                  {metric.number}
-                </div>
-                <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-1">
-                  {metric.label}
-                </div>
               </div>
             ))}
           </div>

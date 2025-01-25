@@ -1,6 +1,9 @@
 import Image from "next/image";
 import gsap from "gsap";
 import { useEffect, useState } from "react";
+import { Navigation } from "./components/Navigation";
+import { HeroSection } from "./components/HeroSection";
+import { ProjectCard } from "./components/ProjectCard";
 
 const borderAnimation = `
   @keyframes borderAnimation {
@@ -26,6 +29,48 @@ const movingBorderAnimation = `
     }
   }
 `;
+
+const NAV_ITEMS = ['Portfolio', 'Experience', 'Contact'];
+
+const PROJECTS: {
+  title: string;
+  description: string;
+  stacks: string[];
+  image: string;
+  link?: string;
+  type: 'web' | 'mobile';
+}[] = [
+  {
+    title: "Dimedika",
+    description: "Medical Record App",
+    stacks: ["NestJS", "NextJS", "Mantine UI", "MongoDB"],
+    image: "/dimedika.png",
+    link: "https://dimedika.id",
+    type: "web"
+  },
+  {
+    title: "IFG Life",
+    description: "Insurance Mobile App",
+    stacks: ["React Native", "Redux", "Node.js", "PostgreSQL"],
+    image: "/lifeid.png",
+    link: "https://ifg-life.id",
+    type: "mobile"
+  },
+  {
+    title: "OBS Solution",
+    description: "Financial Technology Platform",
+    stacks: ["NextJS", "NestJS", "PostgreSQL", "AWS"],
+    image: "/obs.png",
+    type: "web"
+  },
+  {
+    title: "Hanel Asia",
+    description: "Manufacture Management System",
+    stacks: ["React", "Material UI", "Node.js", "PostgreSQL"],
+    image: "/eroses.png",
+    type: "web"
+  }
+];
 
 export default function HomeContainer() {
   const [darkMode, setDarkMode] = useState(false);
@@ -230,100 +275,13 @@ export default function HomeContainer() {
         }
       `}</style>
 
-      <nav className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 transition-colors duration-300">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-16 flex items-center justify-between">
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
-            >
-              {darkMode ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
-              )}
-            </button>
-
-            <div className="flex items-center space-x-4">
-              {['Portfolio', 'Experience', 'Contact'].map((item, index) => (
-                <a
-                  key={index}
-                  href={`#${item.toLowerCase()}`}
-                  className="nav-item relative px-3 sm:px-6 py-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
-                >
-                  {item}
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-[length:200%_200%] animate-[borderAnimation_3s_ease-in-out_infinite] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="h-[2px] bg-gradient-to-r from-blue-500 via-red-500 via-purple-500 via-red-500 to-blue-500 bg-[length:300%_100%] animate-[movingBorder_4s_linear_infinite]"></div>
-      </nav>
-
-      <div className="hero-section flex min-h-screen items-center justify-center w-full pt-16 dark:bg-gray-900">
-        <div className="text-center relative">
-          <div className="hidden sm:block circular-text-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[400px] h-[280px] sm:h-[400px]">
-            {[...Array(16)].map((_, index) => (
-              <div
-                key={index}
-                className="circular-text absolute w-full h-full"
-                style={{
-                  transform: `rotate(${index * 22.5}deg)`
-                }}
-              >
-                <span 
-                  className={`
-                    circular-badge
-                    absolute 
-                    left-1/2 
-                    -translate-x-1/2 
-                    -top-8 sm:-top-12 
-                    ${getRandomColor()} 
-                    text-white 
-                    font-mono 
-                    text-xs sm:text-sm 
-                    px-2 sm:px-3 
-                    py-0.5 sm:py-1 
-                    rounded-full
-                    shadow-md
-                    hover:scale-110
-                    transition-transform
-                    duration-200
-                  `}
-                >
-                  {['FULL', 'STACK', 'DEV', '★', 'WEB', 'EXPERT', '2025', '⚡', 'FULL', 'STACK', 'DEV', '★', 'WEB', 'EXPERT', '2025', '⚡'][index]}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="relative w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] mx-auto mb-4">
-            <Image
-              src="/Azim.png"
-              alt="Azim's photo"
-              fill
-              className="profile-image rounded-full object-cover border-4 border-blue-600 shadow-lg hover:shadow-2xl transition-shadow duration-300"
-              priority
-            />
-          </div>
-
-          <h1 className="name-title text-center font-bold text-3xl sm:text-4xl text-blue-600 transition-colors duration-300 cursor-pointer">
-            Azim
-          </h1>
-          <h2 className="role-title text-center text-xl sm:text-2xl text-gray-700 font-semibold mt-2">
-            Software Engineer
-          </h2>
-          <h3 className="location-text text-center text-base sm:text-lg text-gray-500 mt-1">
-            Bandung, Indonesia
-          </h3>
-        </div>
-      </div>
+      <Navigation 
+        items={NAV_ITEMS} 
+        darkMode={darkMode} 
+        onToggleDarkMode={toggleDarkMode} 
+      />
       
+      <HeroSection />
 
       <section id="portfolio" className="min-h-screen bg-gray-50 dark:bg-gray-800 py-12 sm:py-20 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -331,142 +289,16 @@ export default function HomeContainer() {
             Featured Projects
           </h2>
           <div className="space-y-8 sm:space-y-20">
-            {[
-              {
-                title: "Dimedika",
-                description: "Medical Record App",
-                stacks: ["NestJS", "NextJS", "Mantine UI", "MongoDB"],
-                image: "/dimedika.png",
-                link: "https://dimedika.id",
-                type: "web"
-              },
-              {
-                title: "Triadhipa Logistic CMS",
-                description: "Website for Profile Company Triadhipa Logistic",
-                stacks: ["ExpressJS", "PostgreSQL", "AWS EC2", "Bootstrap"],
-                image: "/trd.png",
-                link: "https://trd.co.id",
-                type: "web"
-              },
-              {
-                title: "Eroses",
-                description: "Web app for organization get funds from government",
-                stacks: ["NextJS", "Typescript", "Material UI", "Refine UI"],
-                image: "/eroses.png",
-                type: "web"
-              },
-              {
-                title: "Life by IFG",
-                description: "Insurance App in IOS, Android PWA Platform for revenue and subscription product's insurance",
-                stacks: ["NextJS", "Tailwind", "Redux Saga", "React Native"],
-                image: "/lifeid.png",
-                type: "mobile"
-              },
-              {
-                title: "Tweakmove Pass",
-                description: "Sandboxing Application for Check in gym room",
-                stacks: ["ReactJS", "Redux", "Electron", "Firebase"],
-                image: "/project-placeholder.jpg",
-                type: "web"
-              },
-              {
-                title: "Fishlog WMS",
-                description: "Warehouse management system application for fish logistics",
-                stacks: ["ReactJS", "Redux", "NodeJS", "PostgreSQL"],
-                image: "/project-placeholder.jpg",
-                type: "web"
-              },
-              {
-                title: "Kata Konsumen",
-                description: "CMS And blog web for internal",
-                stacks: ["NextJS", "Tailwind", "Redux Saga", "MongoDB"],
-                image: "/project-placeholder.jpg",
-                type: "web"
-              },
-              {
-                title: "Sherpa",
-                description: "Application for sales forecasting",
-                stacks: ["NestJS", "MongoDB", "VueJS", "Google Cloud"],
-                image: "/project-placeholder.jpg",
-                type: "web"
-              }
-            ].map((project, index) => (
-              <div 
-                key={index}
-                className={`
-                  project-card 
-                  relative 
-                  flex flex-col 
-                  ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} 
-                  gap-4 sm:gap-8 
-                  items-center 
-                  bg-white dark:bg-gray-800
-                  rounded-lg 
-                  p-4 sm:p-6 
-                  hover:shadow-xl 
-                  transition-shadow 
-                  duration-300
-                `}
-              >
-                <div className="flex-1 space-y-3 sm:space-y-4">
-                  <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
-                    {project.link ? (
-                      <a 
-                        href={project.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
-                      >
-                        {project.title} ↗
-                      </a>
-                    ) : (
-                      project.title
-                    )}
-                  </h3>
-                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">{project.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.stacks.map((tech, i) => (
-                      <span 
-                        key={i} 
-                        className="px-2 sm:px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-full text-xs sm:text-sm"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex-1 w-full lg:w-auto">
-                  {project.type === 'web' ? (
-                    <div className="relative w-full aspect-[16/10] bg-gray-900 dark:bg-gray-950 rounded-lg p-2">
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-1 sm:h-1.5 bg-gray-800 dark:bg-gray-700 rounded-b-lg"></div>
-                      <div className="w-full h-full overflow-hidden rounded-md">
-                        <img 
-                          src={project.image} 
-                          alt={project.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="relative w-48 sm:w-64 mx-auto aspect-[9/19] bg-gray-900 dark:bg-gray-950 rounded-3xl p-2">
-                      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-1 bg-gray-800 dark:bg-gray-700 rounded-lg"></div>
-                      <div className="w-full h-full overflow-hidden rounded-2xl">
-                        <img 
-                          src={project.image} 
-                          alt={project.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+            {PROJECTS.map((project, index) => (
+              <ProjectCard 
+                key={index} 
+                project={project} 
+                index={index} 
+              />
             ))}
           </div>
         </div>
       </section>
-
 
       <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -596,7 +428,6 @@ export default function HomeContainer() {
           </div>
         </div>
       </section>
-
 
       <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -787,7 +618,6 @@ export default function HomeContainer() {
           </div>
         </div>
       </section>
-
 
       <section className="py-12 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1128,7 +958,6 @@ export default function HomeContainer() {
           </div>
         </div>
       </footer>
-
     </div>
   );
 }

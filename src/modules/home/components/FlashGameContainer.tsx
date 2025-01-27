@@ -141,10 +141,7 @@ const FlashlightGame = () => {
   // Play a sound and show jumpscare
   const playJumpscare = () => {
     setIsJumpscareVisible(true);
-    setTimeout(() => {
-      setIsJumpscareVisible(false); // Hide jumpscare after 3 seconds
-      setIsGameOver(true); // Set game over state after jumpscare
-    }, 3000);
+    playSound();
   };
 
   const playSound = () => {

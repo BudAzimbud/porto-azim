@@ -4,7 +4,9 @@ const FlashlightGame = () => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [buttonPositions, setButtonPositions] = useState([]);
+  const [buttonPositions, setButtonPositions] = useState<
+    { x: number; y: number }[]
+  >([]);
   const [isClient, setIsClient] = useState(false);
   const [isJumpscareVisible, setIsJumpscareVisible] = useState(false);
   const [isGameStarted, setIsGameStarted] = useState(false);
@@ -12,58 +14,84 @@ const FlashlightGame = () => {
   const [isTimeUp, setIsTimeUp] = useState(false); // Flag for timeout
   const [isGameOver, setIsGameOver] = useState(false); // Flag for game over state
 
-  const audioRef = useRef(null); // Reference for the background audio
-  const timerRef = useRef(null); // Reference for the timer interval
+  const audioRef = useRef<HTMLAudioElement | null>(null); // Reference for the background audio
+  const timerRef = useRef<NodeJS.Timeout | null>(null); // Reference for the timer interval
 
   const questions = [
     {
-      question: "Which of the following frontend frameworks has Azim worked with?",
+      question:
+        "Which of the following frontend frameworks has Azim worked with?",
       correct: "React, Vue, Angular",
-      options: ["React, Vue, Angular", "React, Ember, Vue", "Angular, Svelte, React", "NextJS, Node.js, Laravel"]
+      options: [
+        "React, Vue, Angular",
+        "React, Ember, Vue",
+        "Angular, Svelte, React",
+        "NextJS, Node.js, Laravel",
+      ],
     },
     {
-      question: "Which project did Azim work on as a Lead Frontend React Developer?",
+      question:
+        "Which project did Azim work on as a Lead Frontend React Developer?",
       correct: "Life by IFG",
-      options: ["Eroses", "Retail FX Currency", "Life by IFG", "Kata Konsumen"]
+      options: ["Eroses", "Retail FX Currency", "Life by IFG", "Kata Konsumen"],
     },
     {
-      question: "In which project did Azim integrate Appsflyer in a web React application?",
+      question:
+        "In which project did Azim integrate Appsflyer in a web React application?",
       correct: "Life by IFG",
-      options: ["Eroses", "Life by IFG", "Fishlog WMS", "Response Reminder CMS"]
+      options: [
+        "Eroses",
+        "Life by IFG",
+        "Fishlog WMS",
+        "Response Reminder CMS",
+      ],
     },
     {
-      question: "Which platform did Azim use for deploying the 'Kata Konsumen' project?",
+      question:
+        "Which platform did Azim use for deploying the 'Kata Konsumen' project?",
       correct: "Google Cloud",
-      options: ["AWS", "Azure", "Google Cloud", "IBM Cloud"]
+      options: ["AWS", "Azure", "Google Cloud", "IBM Cloud"],
     },
     {
       question: "Which backend framework did Azim use in the Sherpa project?",
       correct: "NestJS",
-      options: ["NestJS", "Ruby on Rails", "Laravel", "Express.js"]
+      options: ["NestJS", "Ruby on Rails", "Laravel", "Express.js"],
     },
     {
       question: "Which database did Azim use in the Fishlog WMS project?",
       correct: "PostgreSQL",
-      options: ["MongoDB", "PostgreSQL", "SQL Lite", "MySQL"]
+      options: ["MongoDB", "PostgreSQL", "SQL Lite", "MySQL"],
     },
     {
-      question: "What was the main focus of the 'Tweakmove Pass' project Azim worked on?",
+      question:
+        "What was the main focus of the 'Tweakmove Pass' project Azim worked on?",
       correct: "Sanboxing application for gym check-ins",
-      options: ["Sanboxing application for gym check-ins", "Sales forecasting", "Retail currency management", "Insurance product app"]
+      options: [
+        "Sanboxing application for gym check-ins",
+        "Sales forecasting",
+        "Retail currency management",
+        "Insurance product app",
+      ],
     },
     {
-      question: "Which technology did Azim use to build Rest APIs in multiple projects?",
+      question:
+        "Which technology did Azim use to build Rest APIs in multiple projects?",
       correct: "Node.js",
-      options: ["Node.js", "Ruby on Rails", "Laravel", "NextJS"]
+      options: ["Node.js", "Ruby on Rails", "Laravel", "NextJS"],
     },
     {
       question: "What was Azim's role in the Life by IFG project?",
       correct: "Lead Frontend React Developer",
-      options: ["Frontend Developer", "React Developer", "Lead Frontend React Developer", "Fullstack Developer"]
-    }
+      options: [
+        "Frontend Developer",
+        "React Developer",
+        "Lead Frontend React Developer",
+        "Fullstack Developer",
+      ],
+    },
   ];
 
-  const shuffleOptions = (options) => {
+  const shuffleOptions = (options: string[]) => {
     return [...options].sort(() => Math.random() - 0.5);
   };
 
@@ -72,7 +100,7 @@ const FlashlightGame = () => {
   );
 
   // Generate random positions for buttons (only on client-side)
-  const generateButtonPositions = (numButtons) => {
+  const generateButtonPositions = (numButtons: number) => {
     if (isClient) {
       return Array.from({ length: numButtons }, () => ({
         x: Math.random() * (window.innerWidth - 100),
@@ -87,7 +115,7 @@ const FlashlightGame = () => {
   }, []);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setCursorPosition({ x: e.clientX, y: e.clientY });
     };
 
@@ -99,8 +127,12 @@ const FlashlightGame = () => {
 
   useEffect(() => {
     if (isClient) {
-      setShuffledOptions(shuffleOptions(questions[currentQuestionIndex].options));
-      setButtonPositions(generateButtonPositions(questions[currentQuestionIndex].options.length));
+      setShuffledOptions(
+        shuffleOptions(questions[currentQuestionIndex].options)
+      );
+      setButtonPositions(
+        generateButtonPositions(questions[currentQuestionIndex].options.length)
+      );
     }
   }, [currentQuestionIndex, isClient]);
 
@@ -110,7 +142,9 @@ const FlashlightGame = () => {
       timerRef.current = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime <= 1) {
-            clearInterval(timerRef.current);
+            if (timerRef.current) {
+              clearInterval(timerRef.current);
+            }
             setIsTimeUp(true);
             playJumpscare(); // Trigger jumpscare on timeout
             return 0;
@@ -120,28 +154,35 @@ const FlashlightGame = () => {
       }, 1000);
     }
 
-    return () => clearInterval(timerRef.current); // Cleanup timer on unmount
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    }; // Cleanup timer on unmount
   }, [isGameStarted, isTimeUp]);
 
   // Start the game and play background sound
   const startGame = () => {
-    setIsGameStarted(true);
-    setIsGameOver(false); // Reset game over state
-    setIsTimeUp(false); // Reset timeup flag
-    setTimeLeft(10); // Reset timer to 10 seconds
-    setCurrentQuestionIndex(0); // Start from the first question
-    setScore(0); // Reset score
-    if (audioRef.current) {
-      audioRef.current.loop = true;
-      audioRef.current.volume = 0.2;
-      audioRef.current.play();
-    }
+      setIsGameStarted(true);
+      setIsGameOver(false); // Reset game over state
+      setIsTimeUp(false); // Reset timeup flag
+      setTimeLeft(10); // Reset timer to 10 seconds
+      setCurrentQuestionIndex(0); // Start from the first question
+      setScore(0); // Reset score
+      if (audioRef.current) {
+        audioRef.current.loop = true;
+        audioRef.current.volume = 0.2;
+        audioRef.current.play();
+      }
   };
 
   // Play a sound and show jumpscare
   const playJumpscare = () => {
     setIsJumpscareVisible(true);
     playSound();
+    setTimeout(() => {
+      setIsJumpscareVisible(false);
+    }, 3000);
   };
 
   const playSound = () => {
@@ -155,7 +196,7 @@ const FlashlightGame = () => {
     }, 3000);
   };
 
-  const handleAnswerClick = (selectedOption) => {
+  const handleAnswerClick = (selectedOption: string) => {
     if (isTimeUp) return; // Prevent answering after time runs out
 
     if (selectedOption === questions[currentQuestionIndex].correct) {
@@ -164,10 +205,7 @@ const FlashlightGame = () => {
       setIsTimeUp(false); // Reset timeout flag when answered
       setTimeLeft(10); // Reset timer
     } else {
-      playSound(); // Play sound for incorrect answer
-      setTimeout(() => {
-        setIsJumpscareVisible(false); // Hide jumpscare image after 3 seconds
-      }, 3000);
+      playJumpscare();
       setCurrentQuestionIndex(0); // Reset to the first question
       setScore(0); // Reset the score
       setIsGameOver(true); // Set game over state after wrong answer
@@ -197,7 +235,11 @@ const FlashlightGame = () => {
           className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-50"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
         >
-          <img src="/maxresdefault.jpg" alt="Jumpscare" className="w-1/2 h-auto" />
+          <img
+            src="/maxresdefault.jpg"
+            alt="Jumpscare"
+            className="w-1/2 h-auto"
+          />
         </div>
       )}
 
@@ -219,7 +261,9 @@ const FlashlightGame = () => {
             {isGameOver ? (
               <div>
                 <p className="text-2xl mb-4">Game Over!</p>
-                <p className="text-lg mb-4">Your final score is: {score}/{questions.length}</p>
+                <p className="text-lg mb-4">
+                  Your final score is: {score}/{questions.length}
+                </p>
                 <button
                   onClick={startGame} // Reset and start the game
                   className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md text-white"
@@ -232,11 +276,11 @@ const FlashlightGame = () => {
                 {currentQuestionIndex < questions.length ? (
                   <div>
                     <p className="text-lg mb-4">
-                      Question {currentQuestionIndex + 1}: {questions[currentQuestionIndex].question}
+                      Question {currentQuestionIndex + 1}:{" "}
+                      {questions[currentQuestionIndex].question}
                     </p>
-
-                    <p className="text-xl mb-4">Time Left: {timeLeft}s</p> {/* Display Timer */}
-
+                    <p className="text-xl mb-4">Time Left: {timeLeft}s</p>{" "}
+                    {/* Display Timer */}
                     {/* Render buttons at fixed random positions */}
                     {shuffledOptions.map((option, index) => {
                       const position = buttonPositions[index] || { x: 0, y: 0 };
@@ -260,7 +304,9 @@ const FlashlightGame = () => {
                 ) : (
                   <div>
                     <p className="text-2xl mb-4">Game Over!</p>
-                    <p className="text-lg mb-4">Your final score is: {score}/{questions.length}</p>
+                    <p className="text-lg mb-4">
+                      Your final score is: {score}/{questions.length}
+                    </p>
                     <button
                       onClick={startGame}
                       className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md text-white"

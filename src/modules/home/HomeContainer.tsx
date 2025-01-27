@@ -72,6 +72,27 @@ const PROJECTS: {
   }
 ];
 
+const useCountAnimation = (end: number, duration: number = 2000) => {
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    let startTimestamp: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      setCount(Math.floor(progress * end));
+      
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    
+    window.requestAnimationFrame(step);
+  }, [end, duration]);
+  
+  return count;
+};
+
 export default function HomeContainer() {
   const [darkMode, setDarkMode] = useState(false);
 
@@ -252,6 +273,13 @@ export default function HomeContainer() {
     registerScrollTrigger();
   }, []);
 
+  const webAppsCount = useCountAnimation(8);
+  const mobileAppsCount = useCountAnimation(2);
+  const desktopAppsCount = useCountAnimation(3);
+  const cmsAppsCount = useCountAnimation(5);
+  const uptimeCount = useCountAnimation(99.9, 3000);
+  const usersCount = useCountAnimation(50, 3000);
+
   return (
     <div className="w-full dark:bg-gray-900 transition-colors duration-300">
       <style jsx global>{`
@@ -292,7 +320,7 @@ export default function HomeContainer() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             {[
               {
-                number: "8+",
+                number: `${webAppsCount}+`,
                 label: "Web Apps",
                 description: "Production Ready",
                 icon: (
@@ -302,7 +330,7 @@ export default function HomeContainer() {
                 )
               },
               {
-                number: "2+",
+                number: `${mobileAppsCount}+`,
                 label: "Mobile Apps",
                 description: "Cross Platform",
                 icon: (
@@ -312,7 +340,7 @@ export default function HomeContainer() {
                 )
               },
               {
-                number: "3+",
+                number: `${desktopAppsCount}+`,
                 label: "Desktop Apps",
                 description: "Electron Based",
                 icon: (
@@ -322,7 +350,7 @@ export default function HomeContainer() {
                 )
               },
               {
-                number: "5+",
+                number: `${cmsAppsCount}+`,
                 label: "CMS Apps",
                 description: "Admin Dashboards",
                 icon: (
@@ -355,12 +383,12 @@ export default function HomeContainer() {
           <div className="mt-8 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
             {[
               {
-                number: "99.9%",
+                number: `${uptimeCount.toFixed(1)}%`,
                 label: "Uptime",
                 color: "text-green-600"
               },
               {
-                number: "50K+",
+                number: `${usersCount}K+`,
                 label: "Active Users",
                 color: "text-blue-600"
               },

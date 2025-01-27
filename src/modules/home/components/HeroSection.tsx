@@ -27,10 +27,10 @@ export const HeroSection = () => {
       />
       <div className="absolute inset-0 w-full h-full overflow-hidden">
         <Image
-          src="/Azim.png"
+          src="/typing-keyboard.gif"
           alt="Keyboard background"
           fill
-          className="object-cover opacity-10 dark:opacity-5"
+          className="bg-[100vw_100px] opacity-10 dark:opacity-5"
           priority
         />
       </div>

@@ -183,6 +183,7 @@ const FlashlightGame = () => {
     setTimeout(() => {
       setIsJumpscareVisible(false);
     }, 3000);
+    setIsGameOver(true); // Set game over state after wrong answer
   };
 
   const playSound = () => {
@@ -208,7 +209,6 @@ const FlashlightGame = () => {
       playJumpscare();
       setCurrentQuestionIndex(0); // Reset to the first question
       setScore(0); // Reset the score
-      setIsGameOver(true); // Set game over state after wrong answer
     }
   };
 

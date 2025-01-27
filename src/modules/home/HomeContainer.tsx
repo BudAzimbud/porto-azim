@@ -30,7 +30,7 @@ const movingBorderAnimation = `
   }
 `;
 
-const NAV_ITEMS = ['Portfolio', 'Experience', 'Contact'];
+const NAV_ITEMS = [ 'Experience', 'Contact'];
 
 const PROJECTS: {
   title: string;

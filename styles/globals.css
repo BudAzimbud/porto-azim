@@ -2,3 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+.bloody-text {
+    color: red;
+    text-shadow: 
+      2px 2px 5px rgba(0, 0, 0, 0.8),
+      0 0 10px rgba(255, 0, 0, 0.7),
+      0 0 20px rgba(255, 0, 0, 0.5),
+      0 0 30px rgba(255, 0, 0, 0.4);
+    animation: bloodDrip 1.5s infinite alternate;
+  }
+  
+  @keyframes bloodDrip {
+    0% {
+      text-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.8),
+        0 0 10px rgba(255, 0, 0, 0.7),
+        0 0 20px rgba(255, 0, 0, 0.5),
+        0 0 30px rgba(255, 0, 0, 0.4);
+    }
+    100% {
+      text-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.8),
+        0 0 10px rgba(255, 0, 0, 1),
+        0 0 20px rgba(255, 0, 0, 1),
+        0 0 30px rgba(255, 0, 0, 0.8);
+    }
+  }
+  

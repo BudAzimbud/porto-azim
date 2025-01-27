@@ -1,9 +1,30 @@
 import Image from "next/image";
 import { getRandomColor } from "../utils/colors";
+import { useState, useEffect } from "react";
 
 export const HeroSection = () => {
+  // Add state for mouse position
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  // Add effect to track mouse movement
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
     <div className="hero-section flex min-h-screen items-center justify-center w-full pt-16 dark:bg-gray-900 relative">
+      {/* Add flashlight effect div */}
+      <div
+        className="pointer-events-none fixed inset-0 z-30 transition-opacity duration-300"
+        style={{
+          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.1), transparent 40%)`,
+        }}
+      />
       <div className="absolute inset-0 w-full h-full overflow-hidden">
         <Image
           src="/Azim.png"

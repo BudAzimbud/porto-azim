@@ -72,7 +72,7 @@ export const HeroSection = () => {
 
         <div className="relative w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] mx-auto mb-4">
           <Image
-            src="/Azim.png"
+            src="/Azim2.png"
             alt="Azim's photo"
             fill
             className="profile-image rounded-full object-cover border-4 border-blue-600 shadow-lg hover:shadow-2xl transition-shadow duration-300"
